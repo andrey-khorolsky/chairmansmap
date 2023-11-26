@@ -1,5 +1,12 @@
 # README
 
+Rails + Geoserver(PostGIS) + Leaflet(leaflet-geoserver-request)
+also Jquery, Tailwind, PostgreSQL, Java 11
+
+Start:
+`sh /usr/share/geoserver/bin/startup.sh`
+`./bin/dev`
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 

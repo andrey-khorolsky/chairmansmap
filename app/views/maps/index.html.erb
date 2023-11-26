@@ -1,8 +1,31 @@
-<%= javascript_include_tag "main_map" %>
 <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+<%= javascript_include_tag "main_map" %>
 
+<div class="flex h-full">
+    <!-- map -->
+        <div class="mx-4 my-4 w-3/5 max-h-700px">
+            <p style="color: green"><%= notice %></p>
+            <div id="map" class="map w-full h-full"></div>
+        </div>
 
-<div class="mx-4 my-4 w-full h-full max-h-700px">
-    <p style="color: green"><%= notice %></p>
-    <div id="map" class="map w-full min-h-full"></div>
+    <!-- form -->
+    <div id="data_form" class="p-5 w-2/5 h-full max-h-700px">
+        <div class="rounded-lg p-8 flex flex-col w-full shadow-2xl h-full">
+            <div class="flex-auto">
+                <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Данные участка № 100</h2>
+                <p class="leading-relaxed mb-5 text-gray-600">Post-ironic portland shabby chic echo park, banjo fashion axe</p>
+                <div class="relative mb-4">
+                    <label for="owner" class="leading-7 text-sm text-gray-600">Владелец участка</label>
+                    <input type="text" id="owner" name="owner" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                </div>
+                <div class="relative mb-4">
+                    <label for="message" class="leading-7 text-sm text-gray-600">Message</label>
+                    <input id="message" name="message" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+                </div>
+            </div>
+            
+            <button class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Button</button>
+            <p class="text-xs text-gray-500 mt-3">Chicharrones blog helvetica normcore iceland tousled brook viral artisan.</p>
+        </div>
+    </div>
 </div>

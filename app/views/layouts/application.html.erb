@@ -3,22 +3,14 @@
   <head>
     <title>Chairmansmap</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
-    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
-    <script src="leaflet.wms.js"></script>
 
-	<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-	<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-	<%
-=begin%>
- <script src="https://api-maps.yandex.ru/2.1/?lang=en_RU&amp" type="text/javascript"></script>
-	<script src="../layer/tile/Yandex.js"></script> 
-<%
-=end%>
-  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Leaflet CSS and JS -->
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" /> 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script> 
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
@@ -27,7 +19,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="h-screen max-h-screen">
+  <body class="h-screen max-h-screen flex flex-col">
     <header class='w-full text-gray-700 bg-white border-t border-gray-100 shadow-sm body-font'>
       <div class='container flex flex-col items-start justify-between p-6 mx-auto md:flex-row'>
         <a class='flex items-center mb-4 font-medium text-gray-900 title-font md:mb-0'>
@@ -47,7 +39,7 @@
       </div>
     </header>
 
-    <main class="mx-12 my-4 h-4/5 w-4/5 flex">
+    <main class="m-6 w-full-8 flex-auto">
       <%= yield %>
     </main>
 
@@ -58,5 +50,8 @@
         </p>
       </div>
     </footer>
+
+    <!-- Leaflet Geoserver wfs -->
+    <%= javascript_include_tag "L.Geoserver" %>
   </body>
 </html>

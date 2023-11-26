@@ -1,11 +1,17 @@
 console.log("map");
 
+const zoom = 17;
+const coord = {
+  lat: 44.50861,
+  lng:33.57975
+}
+
 $(document).ready(function () {
   var map = L.map("map", {
-    center: [44.50861, 33.57975],
-    zoom: 17,
+    center: [44.503, 33.588],
+    zoom: zoom,
   });
-  // 17/44.50861/33.57975
+
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -16,105 +22,40 @@ $(document).ready(function () {
     format: "image/png",
     transparent: true,
   });
-  map.addLayer(wmsLayer);
+  // wmsLayer.addTo(map);
 
-  // var popup = L.popup();
-
-  // function onMapClick(e) {
-  //   popup
-  //     .setLatLng(e.latlng)
-  //     .setContent("You clicked the map at " + e.latlng.toString())
-  //     .openOn(map);
-  // }
-
-  // map.on("click", onMapClick);
-
-  // L.geoJson(wmsLayer)
-  //   .on('click', function(e){
-  //       console.log(e.sourceTarget.feature);
-  //   })
-  //   .addTo(map)
-
-  // Set vectorTileOptions
-  // var vectorTileOptions = {
-  //   vectorTileLayerStyles: {
-  //   'gis_osm_traffic': function() {
-  //   return {
-  //     color: 'red',
-  //     opacity: 1,
-  //     fillColor: 'yellow',
-  //     fill: true,
+  // var wfsLayer = L.Geoserver.wfs("http://0.0.0.0:8080/geoserver/wfs", {
+  //   layers: "web_gis:gis_osm_traffic",
+  //   onEachFeature: function(feature, layer){
+  //     console.log(feature.properties);
+  //     layer.bindPopup("cool " + feature.name);
+  //     layer.bindPopup(feature.properties);
   //   }
-  //   },
-  //   },
-  //   interactive: true,	// Make sure that this VectorGrid fires mouse/pointer events
-  //   }
+  // });
+  // wfsLayer.addTo(map);
 
-  //   // Set the coordinate system
-  //   var projection_epsg_no = '900913';
-  //   // Set the variable for storing the workspace:layername
-  //   var campground_geoserverlayer = 'web_gis:gis_osm_traffic';
-  //   // Creating the full vectorTile url
-  //   var campingURL = '/geoserver/gwc/service/tms/1.0.0/' + campground_geoserverlayer + '@EPSG%3A' + projection_epsg_no + '@pbf/{z}/{x}/{-y}.pbf';
-  //   // Creating the Leaflet vectorGrid object
-  //   var camping_vectorgrid = L.vectorGrid.protobuf(campingURL, vectorTileOptions)
+  // map.setView(new L.LatLng(coord.lat, coord.lng), zoom);
 
-  //   // Define the action taken once a polygon is clicked. In this case we will create a popup with the camping name
-  // camping_vectorgrid.on('click', function(e) {
-  //     L.popup()
-  //       .setContent(e.layer.properties.naamnl)
-  //       .setLatLng(e.latlng)
-  //       .openOn(map);
-  //   })
-  //   .addTo(map);
+  map.on("click", function (event) {
+    var latlng = map.mouseEventToLatLng(event.originalEvent);
+    console.log(latlng.lat + ", " + latlng.lng);
+  });
 
-  //   // Add the vectorGrid to the map
-  // camping_vectorgrid.addTo(map);
 
-  //   // Set the map view. In this case we set it to the Netherlands
-  //   map.setView([52.2,5.5], 8);
+  // --------------------------
+  // end of work section
+  // --------------------------
 
+
+  // another background map
   // L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
   //       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
   //   }).addTo(map);
 
+  // L.geoJSON(wmsLayer, {onEachFeature: function(feature, layer){}}).addTo(map);
+
   // --------------------------
   // https://github.com/storuky/map/blob/master/app/assets/javascripts/application.js
-
-  // var map = L.map('map').setView([54.76267040025495,37.37548828125], 8),
-  //     leafletView = new PruneClusterForLeaflet();
-
-  // map.options.crs = L.CRS.EPSG3395;
-
-  // L.Icon.Default.imagePath = "/leaflet";
-  // L.tileLayer(
-  //   'http://vec{s}.maps.yandex.net/tiles?l=map&v=4.55.2&z={z}&x={x}&y={y}&scale=2&lang=ru_RU', {
-  //     subdomains: ['01', '02', '03', '04'],
-  //     attribution: '<a http="yandex.ru" target="_blank">Яндекс</a>',
-  //     reuseTiles: true,
-  //     updateWhenIdle: false,
-  //     zoomControl: false,
-  //     maxNativeZoom: 17
-  //   }
-  // ).addTo(map);
-
-  // jQuery.getJSON("/markers.json", {}, function(res){
-  //   res.forEach(function (item) {
-  //     leafletView.RegisterMarker(new PruneCluster.Marker(item[1], item[2], {id: item[0]}));
-  //   });
-  //   map.addLayer(leafletView);
-  // })
-
-  // leafletView.PrepareLeafletMarker = function (marker, data) {
-  //   marker.on('click', function () {
-  //     jQuery.ajax({
-  //       url: "/markers/"+data.id
-  //     }).done(function (res) {
-  //       marker.bindPopup(res);
-  //       marker.openPopup();
-  //     })
-  //   })
-  // }
 
   // -----------------------------
   // yandex example
@@ -151,10 +92,7 @@ $(document).ready(function () {
   // 	})
   // };
 
-  // var overlays = {
-  // 	'Traffic': L.yandex('overlay')
-  // 		.on('load', traffic)
-  //       };
+  // var overlays = {'Traffic': L.yandex('overlay').on('load', traffic)};
 
   // L.control.layers(baseLayers, overlays, {collapsed: false}).addTo(map);
   // var marker = L.marker(center, { draggable: true }).addTo(map);
