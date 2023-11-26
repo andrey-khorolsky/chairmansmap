@@ -3,14 +3,60 @@
   <head>
     <title>Chairmansmap</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+    <script src="leaflet.wms.js"></script>
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+	<%
+=begin%>
+ <script src="https://api-maps.yandex.ru/2.1/?lang=en_RU&amp" type="text/javascript"></script>
+	<script src="../layer/tile/Yandex.js"></script> 
+<%
+=end%>
+  
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="h-screen max-h-screen">
+    <header class='w-full text-gray-700 bg-white border-t border-gray-100 shadow-sm body-font'>
+      <div class='container flex flex-col items-start justify-between p-6 mx-auto md:flex-row'>
+        <a class='flex items-center mb-4 font-medium text-gray-900 title-font md:mb-0'>
+        </a>
+        <nav class='flex flex-wrap items-center justify-center pl-24 text-base md:ml-auto md:mr-auto'>
+            <%= link_to "Map", root_path, class: 'mr-5 font-medium hover:text-gray-900' %>
+            <a href='#_' class='mr-5 font-medium hover:text-gray-900'>About</a>
+            <a href='#_' class='font-medium hover:text-gray-900'>Contact</a>
+        </nav>
+        <div class='items-center h-full'>
+          <a href='#_' class='mr-5 font-medium hover:text-gray-900'>Login</a>
+          <a href='#_'
+                  class='px-4 py-2 text-xs font-bold text-white uppercase transition-all duration-150 bg-teal-500 rounded shadow outline-none active:bg-teal-600 hover:shadow-md focus:outline-none ease'>
+                  Sign Up
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-12 my-4 h-4/5 w-4/5 flex">
+      <%= yield %>
+    </main>
+
+    <footer class="footer footer-center w-full p-2 bg-gray-300 text-gray-800">
+      <div class="text-center">
+        <p>
+          Copyright © 2022 - Andrew
+        </p>
+      </div>
+    </footer>
   </body>
 </html>
