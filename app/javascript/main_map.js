@@ -39,6 +39,11 @@ $(document).ready(function () {
   map.on("click", function (event) {
     var latlng = map.mouseEventToLatLng(event.originalEvent);
     console.log(latlng.lat + ", " + latlng.lng);
+    $("#plot_number").text(latlng.lat);
+    $("#plot_number_kadastr").text(latlng.lat);
+    $("#owner_fio").text(latlng.lat);
+    $("#owner_tel").text(latlng.lat);
+    $("#owner_adr").text(latlng.lat);
   });
 
 
