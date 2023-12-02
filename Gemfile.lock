@@ -54,6 +54,9 @@ GEM
     activerecord (7.0.8)
       activemodel (= 7.0.8)
       activesupport (= 7.0.8)
+    activerecord-postgis-adapter (8.0.3)
+      activerecord (~> 7.0.0)
+      rgeo-activerecord (~> 7.0.0)
     activestorage (7.0.8)
       actionpack (= 7.0.8)
       activejob (= 7.0.8)
@@ -174,6 +177,10 @@ GEM
     reline (0.4.0)
       io-console (~> 0.5)
     rexml (3.2.6)
+    rgeo (3.0.1)
+    rgeo-activerecord (7.0.1)
+      activerecord (>= 5.0)
+      rgeo (>= 1.0.0)
     rubyzip (2.3.2)
     selenium-webdriver (4.15.0)
       rexml (~> 3.2, >= 3.2.5)
@@ -216,6 +223,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  activerecord-postgis-adapter (~> 8.0)
   bootsnap
   capybara
   debug
@@ -224,6 +232,7 @@ DEPENDENCIES
   pg (~> 1.1)
   puma (~> 5.0)
   rails (~> 7.0.8)
+  rgeo (~> 3.0)
   selenium-webdriver
   sprockets-rails
   stimulus-rails
