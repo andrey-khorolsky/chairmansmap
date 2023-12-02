@@ -8,43 +8,45 @@ const coord = {
 
 $(document).ready(function () {
   var map = L.map("map", {
-    center: [44.503, 33.588],
+    center: [coord.lat, coord.lng],
     zoom: zoom,
   });
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom:23
   }).addTo(map);
 
   var wmsLayer = L.tileLayer.wms("http://0.0.0.0:8080/geoserver/wms", {
-    layers: "web_gis:gis_osm_traffic",
+    layers: "web_gis:plots",
     format: "image/png",
     transparent: true,
   });
   // wmsLayer.addTo(map);
 
-  // var wfsLayer = L.Geoserver.wfs("http://0.0.0.0:8080/geoserver/wfs", {
-  //   layers: "web_gis:gis_osm_traffic",
-  //   onEachFeature: function(feature, layer){
-  //     console.log(feature.properties);
-  //     layer.bindPopup("cool " + feature.name);
-  //     layer.bindPopup(feature.properties);
-  //   }
-  // });
-  // wfsLayer.addTo(map);
+  var wfsLayer = L.Geoserver.wfs("http://0.0.0.0:8080/geoserver/wfs", {
+    layers: "web_gis:plots",
+    onEachFeature: function(feature, layer){
+      layer.on("click", function (event) {
+        $.get("/plot/" + feature.id.split(".")[1],
+          {id: feature.properties.id},
+          function(data){
+            console.log(data)
+            $("#plot_number").text(data.plot_number);
+            $("#plot_number_kadastr").text(data.area);
+            $("#owner_fio").text(data.owner_first_name + " " + data.owner_middle_name + " " + data.owner_surname);  
+            $("#owner_tel").text(data.owner_tel);
+            $("#owner_adr").text(data.owner_adr);
+          })
+      });
+    }
+  });
+  wfsLayer.addTo(map);
 
   // map.setView(new L.LatLng(coord.lat, coord.lng), zoom);
 
-  map.on("click", function (event) {
-    var latlng = map.mouseEventToLatLng(event.originalEvent);
-    console.log(latlng.lat + ", " + latlng.lng);
-    $("#plot_number").text(latlng.lat);
-    $("#plot_number_kadastr").text(latlng.lat);
-    $("#owner_fio").text(latlng.lat);
-    $("#owner_tel").text(latlng.lat);
-    $("#owner_adr").text(latlng.lat);
-  });
+  //   var latlng = map.mouseEventToLatLng(event.originalEvent);
 
 
   // --------------------------
