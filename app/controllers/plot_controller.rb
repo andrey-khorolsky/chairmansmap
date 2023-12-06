@@ -19,15 +19,23 @@ class PlotController < ApplicationController
     person = owner.person
     plot_data = plot.plot_datum
     render json: {
-      plot_number: plot.number,
-      plot_number_kadastr: plot_data.kadastr_number,
-      area: plot.area,
-      perimetr: plot.perimetr,
-      owner_first_name: person.first_name,
-      owner_middle_name: person.middle_name,
-      owner_surname: person.surname,
-      owner_tel: person.tel,
-      owner_adr: person.address
+      plot:{
+        number: plot.number,
+        number_kadastr: plot_data.kadastr_number,
+        area: plot.area,
+        perimetr: plot.perimetr,
+        sale_status: plot_data.sale_status,
+      },
+      owner: {
+        type: plot_data.owner_type,
+        first_name: person.first_name,
+        middle_name: person.middle_name,
+        surname: person.surname,
+        tel: person.tel,
+        adr: person.address,
+        active_from: owner.active_from,
+        active_to: owner.active_to
+      }
     }
   end
 

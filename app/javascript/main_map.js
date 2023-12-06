@@ -33,11 +33,11 @@ $(document).ready(function () {
           {id: feature.properties.id},
           function(data){
             console.log(data)
-            $("#plot_number").text(data.plot_number);
-            $("#plot_number_kadastr").text(data.area);
-            $("#owner_fio").text(data.owner_first_name + " " + data.owner_middle_name + " " + data.owner_surname);  
-            $("#owner_tel").text(data.owner_tel);
-            $("#owner_adr").text(data.owner_adr);
+            $("#plot_number").text(data.plot.number);
+            $("#plot_number_kadastr").text(data.plot.number_kadastr);
+            $("#owner_fio").text(data.owner.first_name + " " + data.owner.middle_name + " " + data.owner.surname);  
+            $("#owner_tel").text(data.owner.tel);
+            $("#owner_adr").text(data.owner.adr);
           })
       });
     }
