@@ -35,9 +35,15 @@ $(document).ready(function () {
             console.log(data)
             $("#plot_number").text(data.plot.number);
             $("#plot_number_kadastr").text(data.plot.number_kadastr);
-            $("#owner_fio").text(data.owner.first_name + " " + data.owner.middle_name + " " + data.owner.surname);  
+            $("#owner_fio").text(data.owner.first_name + " " + data.owner.middle_name + " " + data.owner.surname);
             $("#owner_tel").text(data.owner.tel);
             $("#owner_adr").text(data.owner.adr);
+            $("#owner_type").text(data.owner.type);
+            $("#owner_adr").text(data.owner.adr);
+            $("#plot_area").text(data.plot.area);
+            $("#plot_perimetr").text(data.plot.perimetr);
+            $("#plot_sale_status").text(data.plot.sale_status);
+            $("#plot_description").text(data.plot.description);
           })
       });
     }

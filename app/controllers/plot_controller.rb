@@ -25,6 +25,7 @@ class PlotController < ApplicationController
         area: plot.area,
         perimetr: plot.perimetr,
         sale_status: plot_data.sale_status,
+        description: plot_data.description
       },
       owner: {
         type: plot_data.owner_type,
