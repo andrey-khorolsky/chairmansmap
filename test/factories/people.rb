@@ -1,11 +1,10 @@
 FactoryBot.define do
   factory :person do
-    name = FFaker::NameRU.name.split
-    first_name { name.first }
-    middle_name { name.last }
+    first_name { FFaker::NameRU.first_name }
+    middle_name { [FFaker::NameRU.middle_name_female, FFaker::NameRU.middle_name_male].sample }
     surname { FFaker::NameRU.last_name }
-    tel { "MyString" }
-    address { FFaker::AddressRU.street_address }
+    tel { FFaker::PhoneNumberRU.international_phone_number }
+    address { "#{FFaker::AddressRU.province}, #{FFaker::AddressRU.city}, #{FFaker::AddressRU.street_address}" }
     birth { FFaker::Date.birthday }
     member_from { FFaker::Date.backward }
   end
