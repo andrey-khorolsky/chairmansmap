@@ -32,10 +32,9 @@ $(document).ready(function () {
         $.get("/plot/" + feature.id.split(".")[1],
           {id: feature.properties.id},
           function(data){
-            console.log(data)
             $("#plot_number").text(data.plot.number);
             $("#plot_number_kadastr").text(data.plot.number_kadastr);
-            $("#owner_fio").text(data.owner.first_name + " " + data.owner.middle_name + " " + data.owner.surname);
+            $("#owner_fio").text(data.owner.surname + " " + data.owner.first_name + " " + data.owner.middle_name);
             $("#owner_tel").text(data.owner.tel);
             $("#owner_adr").text(data.owner.adr);
             $("#owner_type").text(data.owner.type);
@@ -44,6 +43,11 @@ $(document).ready(function () {
             $("#plot_perimetr").text(data.plot.perimetr);
             $("#plot_sale_status").text(data.plot.sale_status);
             $("#plot_description").text(data.plot.description);
+
+            $("#form_person_id").val(data.plot.number).change();
+            $("#open_form_button").removeAttr("disabled");
+            $("#update_form").attr("action", "plot/"+data.plot.number);
+
           })
       });
     }
@@ -53,6 +57,56 @@ $(document).ready(function () {
   // map.setView(new L.LatLng(coord.lat, coord.lng), zoom);
 
   //   var latlng = map.mouseEventToLatLng(event.originalEvent);
+
+  $("#open_form_button").click(function(){
+    $("#show_data_form").addClass("hidden");
+    $("#update_data_form").removeClass("hidden");
+  });
+
+  $("#update_data_button").click(function(){
+    $("#show_data_form").removeClass("hidden");
+    $("#update_data_form").addClass("hidden");
+
+  });
+
+  $("#update_form").submit(function(form=this){
+    $.ajax({
+      url: form.currentTarget.action,
+      type: 'PATCH',
+      data: {
+        owner:{
+          person_id: $("#form_person_id").val()
+        },
+        plot_data:{
+          sale_status: $("#form_sale_status").val(),
+          owner_type: $("#form_owner_type").val(),
+          description: $("#form_description").val()
+        }
+      },
+      dataType: "json",
+      success: function(result){
+        $("#plot_number").text(result.plot.number);
+        $("#plot_number_kadastr").text(result.plot.number_kadastr);
+        $("#owner_fio").text(result.owner.surname + " " + result.owner.first_name + " " + result.owner.middle_name);
+        $("#owner_tel").text(result.owner.tel);
+        $("#owner_adr").text(result.owner.adr);
+        $("#owner_type").text(result.owner.type);
+        $("#owner_adr").text(result.owner.adr);
+        $("#plot_area").text(result.plot.area);
+        $("#plot_perimetr").text(result.plot.perimetr);
+        $("#plot_sale_status").text(result.plot.sale_status);
+        $("#plot_description").text(result.plot.description);
+
+        $("#show_data_form").removeClass("hidden");
+        $("#update_data_form").addClass("hidden");
+      },
+      error: function(error){
+        console.log(error)
+        return false;
+      }
+    });
+    return false;
+  });
 
 
   // --------------------------

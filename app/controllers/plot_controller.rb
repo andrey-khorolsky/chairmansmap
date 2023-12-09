@@ -1,9 +1,10 @@
 class PlotController < ApplicationController
-  before_action :set_plot, only: %i[ show edit update destroy ]
+  protect_from_forgery unless: -> { request.format.json? }
 
   # GET /plots
   def index
     # @plots = Plot.all
+    @people = Person.all.order(:surname)
   end
 
   # GET /plots/all or /plots/all.json
@@ -40,62 +41,53 @@ class PlotController < ApplicationController
     }
   end
 
-  # GET /plots/new
-  # def new
-  #   @plot = Plot.new
-  # end
-
-  # GET /plots/1/edit
-  # def edit
-  # end
-
-  # POST /plots or /plots.json
-  # def create
-  #   @plot = Plot.new(plot_params)
-
-  #   respond_to do |format|
-  #     if @plot.save
-  #       format.html { redirect_to plot_url(@plot), notice: "Plot was successfully created." }
-  #       format.json { render :show, status: :created, location: @plot }
-  #     else
-  #       format.html { render :new, status: :unprocessable_entity }
-  #       format.json { render json: @plot.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
-
   # PATCH/PUT /plots/1 or /plots/1.json
   def update
-    respond_to do |format|
-      if @plot.update(plot_params)
-        format.html { redirect_to plot_url(@plot), notice: "Plot was successfully updated." }
-        format.json { render :show, status: :ok, location: @plot }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @plot.errors, status: :unprocessable_entity }
-      end
+    updated = false
+    plot = Plot.find_by(number: params.require(:id))
+    owner = plot.owner
+    plot_data = plot.plot_datum
+    
+    if owner_params.present?
+      owner.update(owner_params)
+      updated = true
     end
+
+    if plot_data_params.present?
+      plot_data.update(plot_data_params)
+      updated = true
+    end
+    
+    render json: {}, status: 204 unless updated
+
+    person = owner.person
+
+    render json: {
+      plot:{
+        sale_status: plot_data.sale_status,
+        description: plot_data.description
+      },
+      owner: {
+        type: plot_data.owner_type,
+        first_name: person.first_name,
+        middle_name: person.middle_name,
+        surname: person.surname,
+        tel: person.tel,
+        adr: person.address,
+        active_from: owner.active_from,
+        active_to: owner.active_to
+      }}, status: 200
   end
 
-  # DELETE /plots/1 or /plots/1.json
-  # def destroy
-  #   @plot.destroy
-
-  #   respond_to do |format|
-  #     format.html { redirect_to plots_url, notice: "Plot was successfully destroyed." }
-  #     format.json { head :no_content }
-  #   end
-  # end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_plot
-      @plot = Plot.find(params[:id])
+
+    def owner_params
+      params.require(:owner).permit(:person_id)
     end
 
-    # Only allow a list of trusted parameters through.
-    def plot_params
-      params.fetch(:plot, {})
+    def plot_data_params
+      params.require(:plot_data).permit(:sale_status, :owner_type, :description)
     end
   
 end
