@@ -63,10 +63,9 @@ $(document).ready(function () {
     $("#update_data_form").removeClass("hidden");
   });
 
-  $("#update_data_button").click(function(){
+  $("#cancel_data_button").click(function(){
     $("#show_data_form").removeClass("hidden");
     $("#update_data_form").addClass("hidden");
-
   });
 
   $("#update_form").submit(function(form=this){
@@ -102,7 +101,6 @@ $(document).ready(function () {
       },
       error: function(error){
         console.log(error)
-        return false;
       }
     });
     return false;
