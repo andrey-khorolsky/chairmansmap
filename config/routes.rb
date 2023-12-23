@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  resources :plot
+  resources :plot, only: [:index, :show, :update]
+  resources :person, only: [:index, :edit, :update]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
