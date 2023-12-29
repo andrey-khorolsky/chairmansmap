@@ -3,11 +3,19 @@ console.log("map");
 // ------------
 // const
 
-const zoom = 17;
-const coord = {
+var map;
+var wfsLayer;
+var wfsFilter;
+
+var zoom = 17;
+var coord = {
   lat: 44.50861,
   lng:33.57975
 }
+
+var local_wms = "http://0.0.0.0:8080/geoserver/wms"
+// const pkk = "https://pkk.rosreestr.ru/arcgis/rest/services/PKK6/CadastreObjects/MapServer/export?layers=show%3A21&format=PNG32&bbox={bbox}&bboxSR=102100&imageSR=102100&size=1024%2C1024&transparent=true&f=image"
+
 
 // end of const
 // ------------
@@ -55,6 +63,10 @@ function set_plot_data(data) {
   $("#form_person_id").val(data.plot.number).change();
   $("#open_form_button").removeAttr("disabled");
   $("#update_form").attr("action", "plot/"+data.plot.number);
+
+  $("#form_sale_status option:contains(" + data.plot.sale_status + ")").prop('selected', true);
+  $("#form_person_id option:contains(" + data.owner.surname + " " + data.owner.first_name + " " + data.owner.middle_name + ")").prop('selected', true);
+  $("#form_owner_type option:contains(" + data.owner.type + ")").prop('selected', true);
 };
 
 function update_plot_data(data) {
@@ -77,7 +89,7 @@ function update_plot_data(data) {
 // ------------
 
 $(document).ready(function () {
-  var map = L.map("map", {
+  map = L.map("map", {
     center: [coord.lat, coord.lng],
     zoom: zoom,
   });
@@ -88,26 +100,32 @@ $(document).ready(function () {
       maxZoom:23
   }).addTo(map);
 
-  var wmsLayer = L.tileLayer.wms("http://0.0.0.0:8080/geoserver/wms", {
-    layers: "web_gis:plots",
-    format: "image/png",
-    transparent: true,
-  });
+  // var wmsLayer = L.tileLayer.wms(local_wms, {
+  //   layers: "web_gis:plots",
+  //   format: "image/png",
+  //   transparent: true,
+  // });
   // wmsLayer.addTo(map);
 
-  var wfsLayer = L.Geoserver.wfs("http://0.0.0.0:8080/geoserver/wfs", {
+
+  wfsLayer = L.Geoserver.wfs("http://0.0.0.0:8080/geoserver/wfs", {
     layers: "web_gis:plots",
     onEachFeature: function(feature, layer){
+      layer.on("mouseover",(function(){
+        layer.bindTooltip("№ " + feature.properties.number, {permanent: false}).openTooltip();
+      }));
       layer.on("click", function (event) {
         $.get("/plot/" + feature.id.split(".")[1],
           {id: feature.properties.id},
           function(data){
             set_plot_data(data)
-          })
+          }
+        )
       });
     }
   });
   wfsLayer.addTo(map);
+
 
   // map.setView(new L.LatLng(coord.lat, coord.lng), zoom);
 
@@ -132,6 +150,25 @@ $(document).ready(function () {
     return false;
   });
 
+  $("#filters").click(function(){
+    $.get("/plot/filter",
+      {
+        sale_status: $("#filter_sale_status").val(),
+        owner_type: $("#filter_owner_type").val()
+      },
+      function(data){
+        Object.values(wfsLayer._layers).forEach((r) => r.setStyle({fillColor: ""}));
+
+        Object.values(wfsLayer._layers)
+        .filter((el) => data.plots.includes(el.feature.properties.number))
+        .forEach((r) => r.setStyle({fillColor: "red"}));
+      }
+    )
+  });
+
+  $("#reset_filters").click(function(){
+    Object.values(wfsLayer._layers).forEach((r) => r.setStyle({fillColor: ""}));
+  });
 
   // --------------------------
   // end of work section

@@ -1,15 +1,12 @@
 class PlotController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
 
+  NO_MATTER = "не важно"
+
   # GET /plots
   def index
     # @plots = Plot.all
     @people = Person.all.order(:surname)
-  end
-
-  # GET /plots/all or /plots/all.json
-  def all
-    @plots = Plot.all
   end
 
   # GET /plots/1 or /plots/1.json
@@ -79,6 +76,16 @@ class PlotController < ApplicationController
       }}, status: 200
   end
 
+  def filter
+    query = {}
+    query.merge!({owner_type: which_owner}) if which_owner
+    query.merge!({sale_status: which_sale_status}) if which_sale_status
+
+    render json: {
+      plots:  PlotDatum.where(query).map { _1.plot.number }
+    }
+  end
+
 
   private
 
@@ -88,6 +95,14 @@ class PlotController < ApplicationController
 
     def plot_data_params
       params.require(:plot_data).permit(:sale_status, :owner_type, :description)
+    end
+
+    def which_owner
+      (params.require(:owner_type) == NO_MATTER) ? false : params.require(:owner_type)
+    end
+
+    def which_sale_status
+      (params.require(:sale_status) == NO_MATTER) ? false : params.require(:sale_status)
     end
   
 end
