@@ -24,6 +24,10 @@ var local_wms = "http://0.0.0.0:8080/geoserver/wms"
 // ------------
 // functions
 
+function full_name(names){
+  return names.surname + " " + names.first_name + " " + names.middle_name
+};
+
 function show_update_form(){
   $("#show_data_form").addClass("hidden");
   $("#update_data_form").removeClass("hidden");
@@ -48,43 +52,38 @@ function get_form_data(){
 };
 
 function set_plot_data(data) {
-  $("#plot_number").text(data.plot.number);
-  $("#plot_number_kadastr").text(data.plot.number_kadastr);
-  $("#owner_fio").text(data.owner.surname + " " + data.owner.first_name + " " + data.owner.middle_name);
-  $("#owner_tel").text(data.owner.tel);
-  $("#owner_adr").text(data.owner.adr);
-  $("#owner_type").text(data.owner.type);
-  $("#owner_adr").text(data.owner.adr);
-  $("#plot_area").text(data.plot.area);
-  $("#plot_perimetr").text(data.plot.perimetr);
-  $("#plot_sale_status").text(data.plot.sale_status);
-  $("#plot_description").text(data.plot.description);
+  $("#plot_number").text(data.number);
+  $("#plot_number_kadastr").text(data.plot_datum.kadastr_number);
+  $("#owner_fio").text(full_name(data.person));
+  $("#owner_tel").text(data.person.tel);
+  $("#owner_adr").text(data.person.address);
+  $("#owner_type").text(data.plot_datum.owner_type);
+  $("#plot_area").text(data.area);
+  $("#plot_perimetr").text(data.perimetr);
+  $("#plot_sale_status").text(data.plot_datum.sale_status);
+  $("#plot_description").text(data.description);
 
-  $("#form_person_id").val(data.plot.number).change();
+  $("#form_person_id").val(data.number).change();
   $("#open_form_button").removeAttr("disabled");
-  $("#update_form").attr("action", "plot/"+data.plot.number);
+  $("#update_form").attr("action", "plot/"+data.number);
 
-  $("#form_sale_status option:contains(" + data.plot.sale_status + ")").prop('selected', true);
-  $("#form_person_id option:contains(" + data.owner.surname + " " + data.owner.first_name + " " + data.owner.middle_name + ")").prop('selected', true);
-  $("#form_owner_type option:contains(" + data.owner.type + ")").prop('selected', true);
+  $("#form_sale_status option:contains(" + data.plot_datum.sale_status + ")").prop('selected', true);
+  $("#form_person_id option:contains(" + full_name(data.person) + ")").prop('selected', true);
+  $("#form_owner_type option:contains(" + data.plot_datum.owner_type + ")").prop('selected', true);
 };
 
 function update_plot_data(data) {
-  $("#plot_number").text(data.plot.number);
-  $("#plot_number_kadastr").text(data.plot.number_kadastr);
-  $("#owner_fio").text(data.owner.surname + " " + data.owner.first_name + " " + data.owner.middle_name);
-  $("#owner_tel").text(data.owner.tel);
-  $("#owner_adr").text(data.owner.adr);
-  $("#owner_type").text(data.owner.type);
-  $("#owner_adr").text(data.owner.adr);
-  $("#plot_area").text(data.plot.area);
-  $("#plot_perimetr").text(data.plot.perimetr);
-  $("#plot_sale_status").text(data.plot.sale_status);
-  $("#plot_description").text(data.plot.description);
+  $("#owner_fio").text(full_name(data.person));
+  $("#owner_tel").text(data.person.tel);
+  $("#owner_adr").text(data.person.address);
+  $("#owner_type").text(data.plot_datum.owner_type);
+  $("#plot_sale_status").text(data.plot_datum.sale_status);
+  $("#plot_description").text(data.description);
 
   $("#show_data_form").removeClass("hidden");
   $("#update_data_form").addClass("hidden");
 };
+
 // end of functions
 // ------------
 
@@ -159,14 +158,19 @@ $(document).ready(function () {
       function(data){
         Object.values(wfsLayer._layers).forEach((r) => r.setStyle({fillColor: ""}));
 
-        Object.values(wfsLayer._layers)
-        .filter((el) => data.plots.includes(el.feature.properties.number))
-        .forEach((r) => r.setStyle({fillColor: "red"}));
+        if (data.plots){
+          Object.values(wfsLayer._layers)
+          .filter((el) => data.plots.includes(el.feature.properties.number))
+          .forEach((r) => r.setStyle({fillColor: "red"}));
+        }
       }
     )
   });
 
   $("#reset_filters").click(function(){
+    $("#filter_sale_status option:contains('не важно')").prop('selected', true);
+    $("#filter_owner_type option:contains('не важно')").prop('selected', true);
+
     Object.values(wfsLayer._layers).forEach((r) => r.setStyle({fillColor: ""}));
   });
 

@@ -3,77 +3,34 @@ class PlotController < ApplicationController
 
   NO_MATTER = "не важно"
 
-  # GET /plots
+  # GET /
   def index
-    # @plots = Plot.all
     @people = Person.all.order(:surname)
   end
 
-  # GET /plots/1 or /plots/1.json
+  # GET /plot/1 or /plot/1.json
   def show
-    gid = params[:id]
-    plot = Plot.find(gid)
-    owner = plot.owner
-    person = owner.person
-    plot_data = plot.plot_datum
-    render json: {
-      plot:{
-        number: plot.number,
-        number_kadastr: plot_data.kadastr_number,
-        area: plot.area,
-        perimetr: plot.perimetr,
-        sale_status: plot_data.sale_status,
-        description: plot_data.description
-      },
-      owner: {
-        type: plot_data.owner_type,
-        first_name: person.first_name,
-        middle_name: person.middle_name,
-        surname: person.surname,
-        tel: person.tel,
-        adr: person.address,
-        active_from: owner.active_from,
-        active_to: owner.active_to
-      }
-    }
+    render json: Plot.find(params[:id]), include: ["plot_datum", "owner", "person"]
   end
 
-  # PATCH/PUT /plots/1 or /plots/1.json
+  # PATCH/PUT /plot/1 or /plot/1.json
   def update
     updated = false
     plot = Plot.find_by(number: params.require(:id))
-    owner = plot.owner
-    plot_data = plot.plot_datum
     
     if owner_params.present?
-      owner.update(owner_params)
+      plot.owner.update(owner_params)
       updated = true
     end
 
     if plot_data_params.present?
-      plot_data.update(plot_data_params)
+      plot.plot_datum.update(plot_data_params)
       updated = true
     end
     
     render json: {}, status: 204 unless updated
 
-    person = owner.person
-
-    render json: {
-      plot:{
-        sale_status: plot_data.sale_status,
-        description: plot_data.description
-      },
-      owner: {
-        type: plot_data.owner_type,
-        first_name: person.first_name,
-        middle_name: person.middle_name,
-        surname: person.surname,
-        tel: person.tel,
-        adr: person.address,
-        active_from: owner.active_from,
-        active_to: owner.active_to
-      }}, status: 200
+    render json: plot, include: ["plot_datum", "owner", "person"], status: 200
   end
 
   def filter
@@ -81,9 +38,11 @@ class PlotController < ApplicationController
     query.merge!({owner_type: which_owner}) if which_owner
     query.merge!({sale_status: which_sale_status}) if which_sale_status
 
-    render json: {
-      plots:  PlotDatum.where(query).map { _1.plot.number }
-    }
+    if which_owner || which_sale_status
+      render json: {plots:  PlotDatum.where(query).map { _1.plot.number }}
+    else
+      render json: {}
+    end
   end
 
 

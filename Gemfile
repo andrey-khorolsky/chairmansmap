@@ -79,3 +79,5 @@ gem "activerecord-postgis-adapter", "~> 8.0"
 gem "rgeo", "~> 3.0"
 
 gem "ffaker", "~> 2.23"
+
+gem 'active_model_serializers', '~> 0.10.0'
