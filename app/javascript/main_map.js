@@ -112,7 +112,17 @@ $(document).ready(function () {
     onEachFeature: function(feature, layer){
       layer.on("mouseover",(function(){
         layer.bindTooltip("№ " + feature.properties.number, {permanent: false}).openTooltip();
-      }));
+        layer.setStyle({
+          fillColor: "red",
+          fillOpacity: 0.5
+        });
+      }))
+      .on("mouseout", function(){
+        layer.setStyle({
+          fillColor: "",
+          fillOpacity: 0.2
+        });
+      });
       layer.on("click", function (event) {
         $.get("/plot/" + feature.id.split(".")[1],
           {id: feature.properties.id},
