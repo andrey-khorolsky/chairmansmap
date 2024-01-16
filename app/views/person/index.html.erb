@@ -1,3 +1,34 @@
+<%= javascript_include_tag "people" %>
+
+<!--menu bar-->
+<div class="mb-5 pb-5 px-5 bg-white rounded shadow-xl">
+    <div class="-mx-1">
+        <ul class="flex w-full flex-wrap items-center h-10">
+            <li class="block relative">
+                <input class="peer sr-only" type="radio" value="kept" name="members" id="i1" checked/>
+                <label class="person_filter flex justify-center cursor-pointer border border-gray-300 bg-white py-2 px-4 hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-indigo-500 transition-all duration-500 ease-in-out" for="i1">
+                    Активные участники
+                </label>
+            </li>
+
+            <li class="block relative mx-2">
+                <input class="peer sr-only" type="radio" value="discarded" name="members" id="i2"/>
+                <label class="person_filter flex justify-center cursor-pointer border border-gray-300 bg-white py-2 px-4 hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-indigo-500 transition-all duration-500 ease-in-out" for="i2">
+                    Бывшие участники
+                </label>
+            </li>
+
+            <li class="block relative">
+                <input class="peer sr-only" type="radio" value="all" name="members" id="i3"/>
+                <label class="person_filter flex justify-center cursor-pointer border border-gray-300 bg-white py-2 px-4 hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-indigo-500 transition-all duration-500 ease-in-out" for="i3">
+                    Все участники
+                </label>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!--table with people-->
 <div class="px-4 sm:px-8 py-4 overflow-x-auto mx-16">
     <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
         <table class="min-w-full leading-normal">
