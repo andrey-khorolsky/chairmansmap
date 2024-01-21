@@ -24,6 +24,18 @@ var local_wms = "http://0.0.0.0:8080/geoserver/wms"
 // ------------
 // functions
 
+function plot_id(plot){
+  return Number(plot.id.split(".")[1]);
+};
+
+function set_defaultStyle(layer, color = "", opacity = 0.2){
+  layer.options.defaultStyle = {fillColor: color, fillOpacity: opacity};
+};
+
+function get_defaultStyle(layer){
+  return layer.options.defaultStyle || {fillColor: "", fillOpacity: 0.2};
+};
+
 function full_name(names){
   return names.surname + " " + names.first_name + " " + names.middle_name
 };
@@ -110,22 +122,17 @@ $(document).ready(function () {
   wfsLayer = L.Geoserver.wfs("http://0.0.0.0:8080/geoserver/wfs", {
     layers: "web_gis:plots",
     onEachFeature: function(feature, layer){
+      set_defaultStyle(layer);
       layer.on("mouseover",(function(){
-        layer.bindTooltip("№ " + feature.properties.number, {permanent: false}).openTooltip();
-        layer.setStyle({
-          fillColor: "red",
-          fillOpacity: 0.5
-        });
+        layer.bindTooltip("№ " + plot_id(feature), {permanent: false}).openTooltip();
+        layer.setStyle({fillColor: "red", fillOpacity: 0.5});
       }))
       .on("mouseout", function(){
-        layer.setStyle({
-          fillColor: "",
-          fillOpacity: 0.2
-        });
+        layer.setStyle(get_defaultStyle(layer));
       });
-      layer.on("click", function (event) {
-        $.get("/plot/" + feature.id.split(".")[1],
-          {id: feature.properties.id},
+      layer.on("click", function () {
+        $.get("/plot/" + plot_id(feature),
+          {},
           function(data){
             set_plot_data(data)
           }
@@ -166,12 +173,18 @@ $(document).ready(function () {
         owner_type: $("#filter_owner_type").val()
       },
       function(data){
-        Object.values(wfsLayer._layers).forEach((r) => r.setStyle({fillColor: ""}));
+        Object.values(wfsLayer._layers).forEach((r) => {
+          r.setStyle({fillColor: ""});
+          set_defaultStyle(r);
+        });
 
         if (data.plots){
           Object.values(wfsLayer._layers)
-          .filter((el) => data.plots.includes(el.feature.properties.number))
-          .forEach((r) => r.setStyle({fillColor: "red"}));
+          .filter((el) => data.plots.includes(plot_id(el.feature)))
+          .forEach((r) => {
+            r.setStyle({fillColor: "red"});
+            set_defaultStyle(r, "red");
+          });
         }
       }
     )
@@ -181,7 +194,10 @@ $(document).ready(function () {
     $("#filter_sale_status option:contains('не важно')").prop('selected', true);
     $("#filter_owner_type option:contains('не важно')").prop('selected', true);
 
-    Object.values(wfsLayer._layers).forEach((r) => r.setStyle({fillColor: ""}));
+    Object.values(wfsLayer._layers).forEach((r) => {
+      r.setStyle({fillColor: ""});
+      set_defaultStyle(r);
+    });
   });
 
   // --------------------------

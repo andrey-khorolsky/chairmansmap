@@ -10,10 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_02_184653) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_23_100125) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
+  end
 
   create_table "owners", force: :cascade do |t|
     t.bigserial "plot_id", null: false
@@ -49,11 +52,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_02_184653) do
     t.index ["plot_id"], name: "index_plot_data_on_plot_id"
   end
 
-  create_table "plots", primary_key: "gid", id: :serial, force: :cascade do |t|
-    t.float "area"
-    t.float "perimetr"
-    t.float "number"
+  create_table "plots", id: false, force: :cascade do |t|
+    t.serial "gid", null: false
+    t.float "area", null: false
+    t.float "perimetr", null: false
+    t.integer "number", null: false
     t.geometry "geom", limit: {:srid=>4326, :type=>"multi_polygon"}
+    t.index ["number"], name: "index_plots_on_number", unique: true
   end
 
   add_foreign_key "owners", "people"

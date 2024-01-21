@@ -1,5 +1,5 @@
 class PlotSerializer < ActiveModel::Serializer
-  attributes :id, :number, :area, :perimetr # id means gid
+  attributes :number, :area, :perimetr
 
   has_one :plot_datum
   has_one :owner

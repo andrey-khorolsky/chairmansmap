@@ -9,11 +9,9 @@
 Plot.all.each do |plot|
   person = FactoryBot.create(:person)
   Owner.create(plot_id: plot.number, person_id: person.id, active_from: person.member_from)
-end
 
-Plot.all.each do |plot|
   PlotDatum.create(
-    plot_id: plot.gid,
+    plot_id: plot.number,
     sale_status: ["не продается", "продается"].sample,
     owner_type: ["личная собственность", "государственная собственность"].sample,
     kadastr_number: rand(100000..9999999))
