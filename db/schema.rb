@@ -39,6 +39,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_23_100125) do
     t.date "member_from"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_people_on_discarded_at"
   end
 
   create_table "plot_data", force: :cascade do |t|

@@ -83,3 +83,5 @@ gem "ffaker", "~> 2.23"
 gem 'active_model_serializers', '~> 0.10.0'
 
 gem 'data_migrate'
+
+gem 'discard', '~> 1.2'
