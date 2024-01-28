@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   
   resources :plot, only: [:show, :update]
   resources :person, only: [:index, :edit, :update]
+  
+  get "person/actived", to: "person#actived"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

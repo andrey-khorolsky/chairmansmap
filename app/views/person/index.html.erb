@@ -6,22 +6,22 @@
         <ul class="flex w-full flex-wrap items-center h-10">
             <li class="block relative">
                 <input class="peer sr-only" type="radio" value="kept" name="members" id="i1" checked/>
-                <label class="person_filter flex justify-center cursor-pointer border border-gray-300 bg-white py-2 px-4 hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-indigo-500 transition-all duration-500 ease-in-out" for="i1">
-                    Активные участники
+                <label class="people_filter flex justify-center cursor-pointer border border-gray-300 bg-white py-2 px-4 hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-indigo-500 transition-all duration-500 ease-in-out" for="i1">
+                    Активные участники (<%=@people.kept.count%>)
                 </label>
             </li>
 
             <li class="block relative mx-2">
                 <input class="peer sr-only" type="radio" value="discarded" name="members" id="i2"/>
-                <label class="person_filter flex justify-center cursor-pointer border border-gray-300 bg-white py-2 px-4 hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-indigo-500 transition-all duration-500 ease-in-out" for="i2">
-                    Бывшие участники
+                <label class="people_filter flex justify-center cursor-pointer border border-gray-300 bg-white py-2 px-4 hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-indigo-500 transition-all duration-500 ease-in-out" for="i2">
+                    Бывшие участники (<%=@people.discarded.count%>)
                 </label>
             </li>
 
             <li class="block relative">
                 <input class="peer sr-only" type="radio" value="all" name="members" id="i3"/>
-                <label class="person_filter flex justify-center cursor-pointer border border-gray-300 bg-white py-2 px-4 hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-indigo-500 transition-all duration-500 ease-in-out" for="i3">
-                    Все участники
+                <label class="people_filter flex justify-center cursor-pointer border border-gray-300 bg-white py-2 px-4 hover:bg-gray-50 focus:outline-none peer-checked:border-transparent peer-checked:ring-2 peer-checked:ring-indigo-500 transition-all duration-500 ease-in-out" for="i3">
+                    Все участники (<%=@people.count%>)
                 </label>
             </li>
         </ul>
@@ -63,14 +63,8 @@
 
             <%@people.each do |person| %>
                 <tr>
-                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <div class="flex items-center">
-                                <div class="ml-3">
-                                    <p class="text-gray-900 whitespace-no-wrap">
-                                        <%=person.full_name%>
-                                    </p>
-                                </div>
-                            </div>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm flex items-center ml-3">
+                        <p class="text-gray-900 whitespace-no-wrap"><%=person.full_name%></p>
                     </td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <p class="text-gray-900 whitespace-no-wrap"><%=person.tel%></p>
@@ -79,14 +73,10 @@
                         <p class="text-gray-900 whitespace-no-wrap"><%=person.address%></p>
                     </td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p class="text-gray-900 whitespace-no-wrap">
-                            <%=person.member%>
-                        </p>
+                        <p class="text-gray-900 whitespace-no-wrap"><%=person.member%></p>
                     </td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p class="text-gray-900 whitespace-no-wrap">
-                            <%=person.owners.map(&:plot).count%>
-                        </p>
+                        <p class="text-gray-900 whitespace-no-wrap"><%=person.owners.map(&:plot).count%></p>
                     </td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                         <%= link_to "Редактировать", edit_person_path(person) %>

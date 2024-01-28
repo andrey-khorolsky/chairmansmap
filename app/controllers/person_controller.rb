@@ -13,6 +13,10 @@ class PersonController < ApplicationController
     redirect_to person_index_path
   end
 
+  def actived
+    render json: Person.send(params[:type]).order(:surname)
+  end
+
   private
 
   def person_params
