@@ -1,7 +1,10 @@
 class PersonController < ApplicationController
 
   def index
-    @people = Person.all.order(:surname).includes(:owners)
+    respond_to do |format|
+      format.html { @people = Person.all.order(:surname).includes(:owners) }
+      format.json { render json: Person.send(params[:type]).order(:surname) }
+    end
   end
 
   def edit
@@ -13,9 +16,6 @@ class PersonController < ApplicationController
     redirect_to person_index_path
   end
 
-  def actived
-    render json: Person.send(params[:type]).order(:surname)
-  end
 
   private
 

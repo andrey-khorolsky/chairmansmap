@@ -12,7 +12,7 @@ function person_full_name(person){
 
 $(document).ready(function () {
     $(".people_filter").click(function(){
-        $.get("/person/actived",
+        $.get("/person.json",
             {type: $("#" + $(this).attr("for")).val()},
             function(result){
                 $("tbody").html("");
