@@ -2,6 +2,8 @@ class PersonSerializer < ActiveModel::Serializer
   attributes :id, :first_name, :middle_name, :surname, :tel, :address, :member_from, :plot_count
 
   has_many :owners
+  has_one :owner, -> { where(active_to: nil) }
+  has_many :plots, through: :owners
 
   def member_from
     object.member_from.strftime("%d.%m.%Y")
