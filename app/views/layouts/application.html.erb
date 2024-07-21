@@ -24,7 +24,7 @@
         </a>
         <nav class='flex flex-wrap items-center justify-center pl-24 text-base md:ml-auto md:mr-auto'>
             <%= link_to "Карта", root_path, class: 'mr-5 font-medium hover:text-gray-900' %>
-            <%= link_to "Люди", root_path, class: 'mr-5 font-medium hover:text-gray-900' %>
+            <%= link_to "Участники", person_index_path, class: 'mr-5 font-medium hover:text-gray-900' %>
         </nav>
       </div>
     </header>
@@ -33,8 +33,8 @@
       <%= yield %>
     </main>
 
-    <footer class="footer footer-center w-full p-2 bg-gray-300 text-gray-800">
-      <div class="text-center">
+    <footer class="p-2 bg-gray-300 text-gray-800">
+      <div class="text-sm text-center">
         <p>
           Copyright © 2023 - Andrew
         </p>

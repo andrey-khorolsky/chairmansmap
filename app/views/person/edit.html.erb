@@ -1,4 +1,7 @@
 <div class="content-center items-center">
+
+  <%= link_to "Back", person_index_path %>
+  
   <h1 class="font-thinner flex text-4xl pt-10 px-5 mb-8">Редактирование <%=@person.full_name%></h1>
 
   <%= form_for :person, method: :patch, url: person_path(@person), html: {class: "w-1/3 ml-32"} do |f|%>
