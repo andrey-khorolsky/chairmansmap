@@ -14,5 +14,6 @@ Plot.all.each do |plot|
     plot_id: plot.number,
     sale_status: ["не продается", "продается"].sample,
     owner_type: ["личная собственность", "государственная собственность"].sample,
-    kadastr_number: rand(100000..9999999))
+    kadastr_number: rand(100000..9999999)
+  )
 end
