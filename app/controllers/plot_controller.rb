@@ -8,7 +8,7 @@ class PlotController < ApplicationController
 
   # GET /plot/1 or /plot/1.json
   def show
-    render json: Plot.find(params[:id]), include: ["plot_datum", "owner", "person"]
+    render json: PlotSerializer.new.serialize_to_json(Plot.find(params[:id]))
   end
 
   # PATCH/PUT /plot/1 or /plot/1.json
@@ -28,7 +28,7 @@ class PlotController < ApplicationController
 
     render json: {}, status: 204 unless updated
 
-    render json: plot, include: ["plot_datum", "owner", "person"], status: 200
+    render json: PlotSerializer.new.serialize_to_json(plot), status: 200
   end
 
   private

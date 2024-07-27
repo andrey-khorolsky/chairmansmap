@@ -1,9 +1,12 @@
 class PersonController < ApplicationController
-
   def index
     respond_to do |format|
       format.html { @people = Person.all.order(:surname).includes(:owners) }
-      format.json { render json: Person.send(params[:type]).order(:surname) }
+
+      format.json do
+        @people = Person.send(params[:type]).order(:surname)
+        render json: Panko::ArraySerializer.new(@people, each_serializer: PersonSerializer).to_json
+      end
     end
   end
 

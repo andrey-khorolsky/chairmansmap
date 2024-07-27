@@ -1,9 +1,6 @@
-class PlotSerializer < ActiveModel::Serializer
+class PlotSerializer < Panko::Serializer
   attributes :number, :area, :perimetr
 
-  has_one :plot_datum, dependent: :destroy
-  has_many :owners
-  has_one :owner, -> { where(active_to: nil) }
-  has_many :persons, through: :owners
-  has_one :person, through: :owner
+  has_one :plot_datum, serializer: PlotDatumSerializer
+  has_one :person, serializer: PersonSerializer
 end

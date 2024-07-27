@@ -13,7 +13,9 @@ var coord = {
   lng:33.57975
 }
 
-var local_wms = "http://0.0.0.0:8080/geoserver/wms"
+var wfs_endpoint = "http://0.0.0.0:8080/geoserver/wfs"
+
+// var local_wms = "https://5781-31-28-228-221.ngrok-free.app/geoserver/wms"
 // const pkk = "https://pkk.rosreestr.ru/arcgis/rest/services/PKK6/CadastreObjects/MapServer/export?layers=show%3A21&format=PNG32&bbox={bbox}&bboxSR=102100&imageSR=102100&size=1024%2C1024&transparent=true&f=image"
 
 
@@ -73,7 +75,7 @@ function set_plot_data(data) {
   $("#plot_area").text(data.area);
   $("#plot_perimetr").text(data.perimetr);
   $("#plot_sale_status").text(data.plot_datum.sale_status);
-  $("#plot_description").text(data.description);
+  $("#plot_description").text(data.plot_datum.description);
 
   $("#form_person_id").val(data.number).change();
   $("#open_form_button").removeAttr("disabled");
@@ -82,6 +84,7 @@ function set_plot_data(data) {
   $("#form_sale_status option:contains(" + data.plot_datum.sale_status + ")").prop('selected', true);
   $("#form_person_id option:contains(" + full_name(data.person) + ")").prop('selected', true);
   $("#form_owner_type option:contains(" + data.plot_datum.owner_type + ")").prop('selected', true);
+  $("#form_description").val(data.plot_datum.description);
 };
 
 function update_plot_data(data) {
@@ -90,7 +93,7 @@ function update_plot_data(data) {
   $("#owner_adr").text(data.person.address);
   $("#owner_type").text(data.plot_datum.owner_type);
   $("#plot_sale_status").text(data.plot_datum.sale_status);
-  $("#plot_description").text(data.description);
+  $("#plot_description").text(data.plot_datum.description);
 
   $("#show_data_form").removeClass("hidden");
   $("#update_data_form").addClass("hidden");
@@ -119,7 +122,7 @@ $(document).ready(function () {
   // wmsLayer.addTo(map);
 
 
-  wfsLayer = L.Geoserver.wfs("http://0.0.0.0:8080/geoserver/wfs", {
+  wfsLayer = L.Geoserver.wfs(wfs_endpoint, {
     layers: "web_gis:plots",
     onEachFeature: function(feature, layer){
       set_defaultStyle(layer);
