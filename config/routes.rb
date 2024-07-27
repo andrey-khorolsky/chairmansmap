@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
-
-  get "/plot/filter", to: "plot#filter"
-  
-  resources :plot, only: [:show, :update]
+  resources :plot, only: [:show, :update] do
+    get "filter", to: "plot_filter#index", on: :collection
+  end
 
   resources :person, only: [:index, :edit, :update] do
     get "actived", to: "person#actived", on: :collection
