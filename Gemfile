@@ -86,3 +86,5 @@ gem "discard", "~> 1.2"
 gem "panko_serializer"
 
 gem "oj"
+
+gem "dry-monads"
