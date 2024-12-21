@@ -13,22 +13,13 @@ class PlotController < ApplicationController
 
   # PATCH/PUT /plot/1 or /plot/1.json
   def update
-    updated = false
-    plot = Plot.find_by(number: params.require(:id))
+    plot = PlotUpdater.new.call(params.require(:id), owner_params[:person_id].to_i, plot_data_params)
 
-    if owner_params.present?
-      plot.owner.update(owner_params)
-      updated = true
+    if plot.success?
+      render json: PlotSerializer.new.serialize_to_json(plot.success), status: 200
+    else
+      render json: {message: plot.failure}, status: 400
     end
-
-    if plot_data_params.present?
-      plot.plot_datum.update(plot_data_params)
-      updated = true
-    end
-
-    render json: {}, status: 204 unless updated
-
-    render json: PlotSerializer.new.serialize_to_json(plot), status: 200
   end
 
   private
