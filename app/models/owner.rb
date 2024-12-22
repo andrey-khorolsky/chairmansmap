@@ -3,5 +3,5 @@ class Owner < ApplicationRecord
   belongs_to :person
   has_one :plot_datum, through: :plot
 
-  validates :active_to, uniqueness: {scope: :plot_id}, if: proc { active_to.nil? }
+  validates :plot_id, uniqueness: {scope: :active_to}, unless: :active_to?
 end
