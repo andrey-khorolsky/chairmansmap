@@ -71,6 +71,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "shoulda-matchers"
+  gem "simplecov", require: false
 end
 
 gem "tailwindcss-rails", "~> 2.0"
